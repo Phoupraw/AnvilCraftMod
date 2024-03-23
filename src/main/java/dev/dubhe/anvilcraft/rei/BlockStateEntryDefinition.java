@@ -19,8 +19,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -61,6 +63,10 @@ public class BlockStateEntryDefinition implements EntryDefinition<BlockState>, E
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> BlockState with(BlockState blockState, Property<?> property, Comparable<?> value) {
         return blockState.setValue((Property<T>) property, (T) value);
+    }
+    @SuppressWarnings("unchecked")
+    public static <T extends Comparable<T>> String getName( Property<?> property, Comparable<?> value) {
+        return ((Property<T>) property).getName ((T) value);
     }
     @Override
     public boolean supportSaving() {
@@ -126,7 +132,7 @@ public class BlockStateEntryDefinition implements EntryDefinition<BlockState>, E
     }
     @Override
     public Component asFormattedText(EntryStack<BlockState> entry, BlockState value) {
-        return value.getBlock().getName();
+        return value.getBlock().getName().withStyle(value.getBlock().asItem().getDefaultInstance().getRarity().color);
     }
     @Override
     public Stream<? extends TagKey<?>> getTagsFor(EntryStack<BlockState> entry, BlockState value) {
