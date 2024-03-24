@@ -2,6 +2,7 @@ package dev.dubhe.anvilcraft.rei;
 
 import com.google.common.base.Functions;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.entry.renderer.EntryRenderer;
@@ -20,13 +21,11 @@ import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Objects;
 
@@ -48,7 +47,7 @@ public class BlockStateEntryRenderer implements EntryRenderer<BlockState> {
         poseStack.mulPoseMatrix(new Matrix4f()
           .scaling(1, -1, 1)
           .scale(16 * 0.625f)
-          .translate(0, -1, 0)
+          .translate(0.6f, -0.9f, 0)
           .rotateX(0.5f)
           .rotateY(-0.5f)
         );
@@ -56,11 +55,12 @@ public class BlockStateEntryRenderer implements EntryRenderer<BlockState> {
         //new ItemTransform(new Vector3f(30, 225, 0), new Vector3f(1, -1, 0), new Vector3f(0.625f)).apply(false, poseStack);
         //poseStack.scale(16, 16, 16);
         //new ItemTransform(new Vector3f(30, -30, 0), new Vector3f(0.925f, -0.8125f, 0), new Vector3f(0.625f)).apply(false, poseStack);
-        //Lighting.setupForFlatItems();
+        //Lighting.setupForEntityInInventory();
+        RenderSystem.setupGui3DDiffuseLighting(new Vector3f(-0.2F, -1, 1.0F).normalize(), new Vector3f(0.2F, 1.0F, 0.0F).normalize());
         Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, Functions.constant(graphics.bufferSource().getBuffer(Sheets.translucentCullBlockSheet()))::apply, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
         graphics.bufferSource().endBatch();
-        //Lighting.setupFor3DItems();
+        Lighting.setupFor3DItems();
     }
     @Override
     public @Nullable Tooltip getTooltip(EntryStack<BlockState> entry, TooltipContext context) {
