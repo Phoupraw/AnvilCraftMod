@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -53,19 +54,21 @@ public abstract class ItemStackInjector implements IItemStackInjector {
 
     @Shadow
     public abstract CompoundTag getOrCreateTag();
-
+    /**
+     * 这个方法完全可以由一个静态方法代替，因为{@link ItemStack}是{@code final}的。
+     */
+    @Contract(mutates = "param1", value = "_->param1")
     @Override
     public ItemStack dataCopy(@NotNull ItemStack stack) {
-        stack.setDamageValue(this.getDamageValue());
+        //stack.setDamageValue(this.getDamageValue());
         if (this.hasTag()) stack.setTag(this.getTag());
-        if (this.hasCustomHoverName()) stack.setHoverName(this.getHoverName());
-        stack.setEntityRepresentation(this.getEntityRepresentation());
-        stack.setRepairCost(this.getBaseRepairCost());
-        stack.setPopTime(this.getPopTime());
+        //if (this.hasCustomHoverName()) stack.setHoverName(this.getHoverName());
+        //stack.setEntityRepresentation(this.getEntityRepresentation());
+        //stack.setRepairCost(this.getBaseRepairCost());
+        //stack.setPopTime(this.getPopTime());
         stack.setCount(this.getCount());
         return stack;
     }
-
     @Override
     public boolean removeEnchant(Enchantment enchantment) {
         CompoundTag tag = this.getOrCreateTag();

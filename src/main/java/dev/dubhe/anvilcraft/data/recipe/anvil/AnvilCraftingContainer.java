@@ -10,8 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public record AnvilCraftingContainer(Level level, BlockPos pos, FallingBlockEntity entity)
-        implements Container, StackedContentsCompatible {
+public record AnvilCraftingContainer(Level level, BlockPos pos, FallingBlockEntity entity) implements Container, StackedContentsCompatible {
 
     @Override
     public int getContainerSize() {
